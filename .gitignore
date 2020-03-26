@@ -1,9 +1,11 @@
 aclocal.m4
 autom4te.cache
+.autotools
 compile
 config.log
 config.status
 configure
+.cproject
 depcomp
 .deps
 install-sh
@@ -12,3 +14,5 @@ Makefile
 Makefile.in
 missing
 *.o
+.project
+.settings
