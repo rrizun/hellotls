@@ -16,3 +16,5 @@ missing
 *.o
 .project
 .settings
+CMakeFiles
+*.pb.*

@@ -1,0 +1,68 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <memory>
+#include <string>
+#include <utility>
+
+#include <boost/algorithm/hex.hpp>
+
+#include "net/third_party/quiche/src/quic/core/quic_framer.h"
+#include "net/third_party/quiche/src/quic/core/quic_utils.h"
+#include "net/third_party/quiche/src/common/platform/api/quiche_arraysize.h"
+#include "net/third_party/quiche/src/common/platform/api/quiche_string_piece.h"
+
+#include "net/third_party/quiche/src/quic/core/chlo_extractor.h"
+
+using namespace std;
+using namespace quic;
+
+static string tohex(string in) {
+  string out;
+  boost::algorithm::hex(in, std::back_inserter(out));
+  return out;
+}
+
+static string unhex(string in) {
+  string out;
+  boost::algorithm::unhex(in, std::back_inserter(out));
+  return out;
+}
+
+class TestDelegate : public ChloExtractor::Delegate {
+ public:
+  TestDelegate(){}
+  ~TestDelegate(){}
+
+  // ChloExtractor::Delegate implementation
+  void OnChlo(QuicTransportVersion version,
+              QuicConnectionId connection_id,
+              const CryptoHandshakeMessage& chlo) override {
+    version_ = version;
+    connection_id_ = connection_id;
+    chlo_ = chlo.DebugString();
+  }
+
+  QuicConnectionId connection_id() const { return connection_id_; }
+  QuicTransportVersion transport_version() const { return version_; }
+  const std::string& chlo() const { return chlo_; }
+
+ private:
+  QuicConnectionId connection_id_;
+  QuicTransportVersion version_;
+  std::string chlo_;
+};
+
+int main() {
+  printf("Hello, world!\n");
+
+  quic::QuicEncryptedPacket* packet;
+  auto version = AllSupportedVersions().front();
+
+  auto delegate = TestDelegate();
+
+  ChloExtractor::Extract(*packet, version, {}, &delegate, kQuicDefaultConnectionIdLength);
+
+  return 0;
+}

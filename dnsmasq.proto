@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+// http://thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=blob;f=src/lease.c
+message dnsmasq_lease {
+	google.protobuf.Timestamp expires = 1;
+	string hwaddr = 2;
+	string addr = 3;
+	string hostname = 4;
+	string clid = 5;
+}

@@ -3,7 +3,12 @@ AM_CPPFLAGS=$(MODULES_CFLAGS)
 #AM_CXXFLAGS=
 AM_LDFLAGS=-static-libgcc -static-libstdc++
 
-bin_PROGRAMS = main
-main_SOURCES = main.cpp
+%.pb.h %.pb.cc: %.proto
+	protoc -I. --cpp_out=. $<
 
-LIBS += -lpthread -Wl,-Bstatic $(MODULES_LIBS) -lngtcp2 -lboost_thread -lboost_exception -lboost_system -Wl,-Bdynamic -ldl -lrt 
+BUILT_SOURCES = dnsmasq.pb.h dnsmasq.pb.cc
+
+bin_PROGRAMS = main
+main_SOURCES = main.cpp dnsmasq.pb.cc
+
+LIBS += -lpthread -Wl,-Bstatic $(MODULES_LIBS) -lprotobuf -lboost_filesystem -lboost_stacktrace_basic -lboost_system -lbacktrace -Wl,-Bdynamic -ldl -lrt

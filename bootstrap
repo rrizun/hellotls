@@ -1,4 +1,4 @@
 #!/bin/sh
-git clone https://boringssl.googlesource.com/boringssl third_party/boringssl/src
-git clone https://quiche.googlesource.com/quiche net/third_party/quiche/src
+#git clone https://boringssl.googlesource.com/boringssl third_party/boringssl/src
+#git clone https://quiche.googlesource.com/quiche net/third_party/quiche/src
 autoreconf -i
